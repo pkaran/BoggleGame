@@ -10,7 +10,10 @@ public class Boggle {
     //length of a N*N boggle board
     private int boardLength;
     private char[][] board;
+    //dictionary contains all valid words that can be used by player to earn points
     private Set<String> dictionary = new HashSet<String>();
+    //validWordsOnBoard contains all valid words that are on boggle board
+    private Set<String> validWordsOnBoard = new HashSet<String>();
 
     public Boggle(int boardLength, final String dictionaryPath, final String boardPath) {
 
@@ -30,7 +33,7 @@ public class Boggle {
             while ((line = reader.readLine()) != null) {
 
                 if(line.length() >= 3){
-                    dictionary.add(line);
+                    dictionary.add(line.toLowerCase());
                 }
             }
         }
@@ -68,6 +71,73 @@ public class Boggle {
             System.out.print("\n");
             for (int j = 0; j < boardLength; j++) {
                 System.out.print(board[i][j] + " ");
+            }
+        }
+    }
+
+    //function below finds all words starting with each word on board using depth first traversal
+    //each word found which also appears in dictionary is added to validWordsOnBoard
+    private void findWordsOnBoard(String word, boolean[][] visited, char[][] board, int i, int j) {
+
+        //mark visited word cell as true so we don't use it again in the formation of a word
+        visited[i][j] = true;
+        //add the word of cell just visited to the end of the word
+        word += board[i][j];
+
+        //if word is valid, add it to validWordsOnBoard, else ignore
+        if(dictionary.contains(word))
+            validWordsOnBoard.add(word);
+
+        for(int row = i - 1; row <= i + 1 && row < board.length; row++) {
+
+            for(int column = j - 1; column <= j+ 1 && column < board[0].length; column++) {
+
+                if(row >= 0 && column >= 0 && !visited[row][column]){
+                    findWordsOnBoard(word, visited, board, row, column);
+                }
+            }
+        }
+
+        //take out the last letter (of just visited cell) from word
+        String temp = word.substring(0,word.length()-1);
+        word = temp;
+        visited[i][j] = false;
+    }
+
+    //find all words on boggle board which are in dictionary
+    public void findValidWordsOnBoard(){
+
+        //mark each visited cell to ensure it gets used only once while forming a word
+        boolean[][] visited = new boolean[boardLength][boardLength];
+        String word = "";
+
+        for(int i = 0; i < boardLength; i++) {
+            for(int j = 0; j < boardLength; j++)
+                findWordsOnBoard(word, visited, board, i, j);
+        }
+    }
+
+    //export all valid words found on boggle board to data/validWords.txt
+    public void exportValidWordsToFile(){
+
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter( new FileWriter( "data/validWords.txt"));
+            if(validWordsOnBoard.size() == 0){
+                writer.write("No valid words on board found");
+            }else{
+                for(String validWord : validWordsOnBoard) writer.write(validWord + "\n");
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if ( writer != null) writer.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

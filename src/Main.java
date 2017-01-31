@@ -8,5 +8,7 @@ public class Main {
 
         Boggle board = new Boggle(boardLength, dictionaryPath, boardPath);
         board.displayBoard();
+        board.findValidWordsOnBoard();
+        board.exportValidWordsToFile();
     }
 }
