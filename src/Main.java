@@ -1,7 +1,12 @@
 public class Main {
 
+    private final static String dictionaryPath = "data/dictionary.txt";
+    private final static String boardPath = "data/board.txt";
+    private final static int boardLength = 4;
+
     public static void main(String[] args) {
 
-        System.out.println("hello");
+        Boggle board = new Boggle(boardLength, dictionaryPath, boardPath);
+        board.displayBoard();
     }
 }
