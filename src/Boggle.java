@@ -141,4 +141,20 @@ public class Boggle {
             }
         }
     }
+
+    public int getBoardLength() {
+        return boardLength;
+    }
+
+    public Set<String> getDictionary() {
+        Set<String> dictionaryCopy = new HashSet<String>();
+        dictionaryCopy.addAll(dictionary);
+        return dictionaryCopy;
+    }
+
+    public Set<String> getValidWordsOnBoard() {
+        Set<String> validWordsOnBoardCopy = new HashSet<String>();
+        validWordsOnBoardCopy.addAll(validWordsOnBoard);
+        return validWordsOnBoardCopy;
+    }
 }
