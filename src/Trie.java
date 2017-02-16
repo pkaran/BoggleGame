@@ -99,15 +99,3 @@ public class Trie {
     }
 }
 
-/*
-class Node {
-
-    Node[] aTozNodeArray;
-    boolean isEnd;
-
-    public Node() {
-        this.aTozNodeArray = new Node[26];      //references for child nodes representing a through z
-    }
-}
-*/
-
